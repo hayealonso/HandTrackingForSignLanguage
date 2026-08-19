@@ -9,7 +9,7 @@ Reconocimiento en tiempo real del alfabeto dactilológico de la lengua de señas
 El objetivo es facilitar la comunicación en entornos digitales —videollamadas, mensajería, formularios— entre personas sordas y personas que no manejan lengua de señas, traduciendo señas a texto sin requerir un intérprete presente.
 
 El dataset fue construido íntegramente por el autor: contiene las letras del abecedario ejecutadas con la mano derecha y capturadas como poses estáticas.
-
+<img width="607" height="603" alt="Captura de pantalla 2026-08-18 225331" src="https://github.com/user-attachments/assets/dfd2674b-8417-4727-9ac4-5f04543e8f82" />
 ## Cómo funciona
 
 El proyecto se estructura como un pipeline de cuatro etapas:
