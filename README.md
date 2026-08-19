@@ -4,7 +4,7 @@ Reconocimiento en tiempo real del alfabeto dactilológico de la lengua de señas
 
 ## Descripción
 
-Reconocimiento en tiempo real del alfabeto dactilológico de la lengua de señas chilena a partir de video de cámara web. En lugar de clasificar la imagen completa, el sistema extrae los 21 landmarks de la mano con MediaPipe y entrena un clasificador Random Forest sobre esas coordenadas. Esto reduce el costo computacional, permite ejecución fluida en tiempo real sobre CPU y hace viable entrenar con un dataset acotado.
+Reconocimiento en tiempo real del alfabeto de la lengua de señas a partir de video de cámara web. En lugar de clasificar la imagen completa, el sistema extrae los 21 landmarks de la mano con MediaPipe y entrena un clasificador Random Forest sobre esas coordenadas. Esto reduce el costo computacional, permite ejecución fluida en tiempo real sobre CPU y hace viable entrenar con un dataset acotado.
 
 El objetivo es facilitar la comunicación en entornos digitales —videollamadas, mensajería, formularios— entre personas sordas y personas que no manejan lengua de señas, traduciendo señas a texto sin requerir un intérprete presente.
 
