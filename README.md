@@ -51,9 +51,6 @@ python train.py           # Entrena y guarda el modelo
 
 [Explica cómo se etiquetan las señas durante la captura: ¿se pasa la etiqueta como argumento? ¿se presiona una tecla?]
 
-## Resultados
-
-[La sección que más pesa. Incluye lo que tengas: número de letras reconocidas, cantidad de muestras por clase, exactitud en el conjunto de prueba, y una matriz de confusión si la generaste con Matplotlib. Menciona qué letras se confunden entre sí — suele ser informativo, por ejemplo entre señas de configuración similar.]
 
 ## Tecnologías
 
