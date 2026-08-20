@@ -16,10 +16,10 @@ El proyecto se estructura como un pipeline de cuatro etapas:
 
 | Archivo | Etapa | Descripción |
 |---|---|---|
-| `collect_data.py` | Captura | Extrae los 21 landmarks de la mano por fotograma con MediaPipe desde la cámara y los almacena etiquetados en `landmarks_data.csv`. |
-| `clean_data.py` | Limpieza | [Describe qué hace: ¿normalización respecto a la muñeca? ¿escalado? ¿eliminación de muestras incompletas?] Genera `landmarks_data_clean.csv`. |
-| `train.py` | Entrenamiento | Entrena un clasificador Random Forest (scikit-learn) sobre los datos limpios y guarda el modelo. |
-| `main.py` | Inferencia | Ejecuta la predicción en tiempo real sobre el video de la cámara. |
+| `collect_data.py` | Captura | abre la cámara, detecta tu mano y guarda sus landmarks normalizados en un CSV cada vez que presionas una tecla A-Z, hasta juntar el número de muestras configurado por letra.. |
+| `clean_data.py` | Limpieza | lee ese CSV, descarta filas con etiquetas inválidas o corruptas, corrige el encoding, y genera un CSV limpio. |
+| `train.py` | Entrenamiento | entrena un Random Forest sobre los landmarks del CSV, prueba distintos hiperparámetros con validación cruzada, mide accuracy en un set de validación separado, y guarda el modelo entrenado. |
+| `main.py` | Inferencia | abre la cámara, detecta la mano en tiempo real, predice la letra con el modelo entrenado, aplica suavizado y confirmación por tiempo sostenido para evitar errores, arma los subtítulos letra por letra, y lo muestra todo en una interfaz con vista doble (cámara limpia + landmarks) y texto estilizado. |
 
 ## Instalación
 
