@@ -48,8 +48,9 @@ python collect_data.py    # Captura las señas con la cámara
 python clean_data.py      # Procesa el dataset
 python train.py           # Entrena y guarda el modelo
 ```
+Para collect_data.py
 
-[Explica cómo se etiquetan las señas durante la captura: ¿se pasa la etiqueta como argumento? ¿se presiona una tecla?]
+Durante la captura, presiona la tecla de la letra que quieres grabar (A-Z). Mientras la mantengas seleccionada y tu mano esté visible, el script captura automáticamente muestras hasta alcanzar el número configurado por letra. Presiona ESC para salir.
 
 
 ## Tecnologías
@@ -59,7 +60,6 @@ python train.py           # Entrena y guarda el modelo
 - **scikit-learn** — clasificador Random Forest
 - **pandas / NumPy** — construcción y manipulación del dataset
 - **Matplotlib** — visualización de resultados
-- **sounddevice** — [salida de audio, si corresponde]
 
 ## Limitaciones y trabajo futuro
 
