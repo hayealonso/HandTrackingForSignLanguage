@@ -1,18 +1,18 @@
-# Entorno virtual
+#Entornos virtuales
 env/
+.venv/
 
-# Configuración del editor
+#Configuración del editor
 .vscode/
 
-# Caché de Python
+#Caché de Python
 __pycache__/
 *.py[cod]
 
-# Videos (demasiado pesados para GitHub)
+#Videos (demasiado pesados para GitHub)
 *.mp4
 
-# Modelo entrenado
-asl_model.pkl
+#Nota: asl_model.pkl SÍ se versiona (pesa ~2 MB), para que main.py funcione apenas se clona el repo
 
-# Variables de entorno / secretos
+#Variables de entorno / secretos
 .env
