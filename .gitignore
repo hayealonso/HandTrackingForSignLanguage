@@ -1,18 +1,20 @@
-# Entorno virtual
+#Entornos virtuales
 env/
+.venv/
 
-# Configuración del editor
+#Configuración del editor
 .vscode/
 
-# Caché de Python
+#Caché de Python
 __pycache__/
 *.py[cod]
 
-# Videos (demasiado pesados para GitHub)
+#Videos (demasiado pesados para GitHub)
 *.mp4
 
-# Modelo entrenado
+#Modelo entrenado: no se versiona porque cada persona debe entrenar el suyo
+#(sus propias señas, su cámara, su iluminación y el tamaño de su mano)
 asl_model.pkl
 
-# Variables de entorno / secretos
+#Variables de entorno / secretos
 .env
