@@ -71,7 +71,13 @@ def main():
 
     cap = cv2.VideoCapture(args.camera)
     if not cap.isOpened():
-        raise SystemExit(f"No se pudo abrir la cámara {args.camera}. Prueba con --camera 1")
+        #En macOS la primera ejecución falla aquí mientras el sistema pide permiso de cámara
+        raise SystemExit(
+            f"No se pudo abrir la cámara {args.camera}.\n"
+            "- Cierra otras apps que la estén usando o prueba con --camera 1.\n"
+            "- En macOS: da permiso de cámara a la Terminal en Configuración del Sistema > "
+            "Privacidad y seguridad > Cámara, cierra la Terminal por completo (Cmd+Q) y vuelve a abrirla."
+        )
 
     #model_complexity=0 usa el modelo liviano de MediaPipe (más rápido en CPU)
     #max_num_hands=1 porque el alfabeto dactilológico se hace con una sola mano

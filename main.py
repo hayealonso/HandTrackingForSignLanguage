@@ -104,7 +104,13 @@ def main():
 
     cap = cv2.VideoCapture(args.camera)
     if not cap.isOpened():
-        raise SystemExit(f"No se pudo abrir la cámara {args.camera}. Prueba con --camera 1")
+        #En macOS la primera ejecución falla aquí mientras el sistema pide permiso de cámara
+        raise SystemExit(
+            f"No se pudo abrir la cámara {args.camera}.\n"
+            "- Cierra otras apps que la estén usando o prueba con --camera 1.\n"
+            "- En macOS: da permiso de cámara a la Terminal en Configuración del Sistema > "
+            "Privacidad y seguridad > Cámara, cierra la Terminal por completo (Cmd+Q) y vuelve a abrirla."
+        )
     cv2.namedWindow(WINDOW_NAME, cv2.WINDOW_NORMAL)
     cv2.resizeWindow(WINDOW_NAME, 1600, 900)
 
