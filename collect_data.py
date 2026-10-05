@@ -50,6 +50,13 @@ def parse_args():
 def main():
     args = parse_args()
     counts = load_existing_counts(args.csv)
+
+    #Avisar si ya hay muestras: las nuevas se agregan al final y se mezclarían con las existentes
+    #(por ejemplo, con el dataset de ejemplo que trae el repositorio)
+    if counts:
+        print(f"Atención: {args.csv} ya tiene {sum(counts.values())} muestras. Las nuevas se agregarán al final.")
+        print("Si quieres un dataset solo con tus señas, borra ese archivo antes de capturar.")
+
     current_letter = None
     recording = False
     frame_count = 0

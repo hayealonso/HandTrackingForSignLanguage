@@ -12,7 +12,9 @@ __pycache__/
 #Videos (demasiado pesados para GitHub)
 *.mp4
 
-#Nota: asl_model.pkl SÍ se versiona (pesa ~2 MB), para que main.py funcione apenas se clona el repo
+#Modelo entrenado: no se versiona porque cada persona debe entrenar el suyo
+#(sus propias señas, su cámara, su iluminación y el tamaño de su mano)
+asl_model.pkl
 
 #Variables de entorno / secretos
 .env

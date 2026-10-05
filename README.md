@@ -16,9 +16,9 @@ En vez de clasificar la imagen completa, el sistema usa [MediaPipe](https://ai.g
 - Necesita pocos datos: unos cientos de muestras por letra bastan.
 - El fondo y la ropa casi no influyen, porque el clasificador solo ve la geometría de la mano.
 
-El dataset incluido lo grabé yo mismo: las 26 letras (A-Z) hechas con la mano derecha como poses estáticas, unas 10.800 muestras en total.
+**El modelo se entrena con tus propias señas.** Cada persona hace las letras a su manera, tiene manos de otro tamaño y usa otra cámara con otra iluminación, así que el repositorio no trae un modelo entrenado: lo armas tú en unos minutos con el pipeline incluido.
 
-## Inicio rápido
+## Instalación
 
 Necesitas **Python 3.10, 3.11 o 3.12** (MediaPipe todavía no es compatible con 3.13) y una cámara web.
 
@@ -37,14 +37,53 @@ Activa el entorno virtual:
 source .venv/bin/activate
 ```
 
-Instala las dependencias y ejecuta:
+Instala las dependencias:
 
 ```bash
 pip install -r requirements.txt
-python main.py
 ```
 
-El repositorio ya trae un modelo entrenado (`asl_model.pkl`), así que no hace falta entrenar nada para probarlo.
+## Uso
+
+### 1. Graba tus señas
+
+El repositorio incluye mi dataset como ejemplo (`landmarks_data.csv` y `landmarks_data_clean.csv`). Como las muestras nuevas se agregan al final del CSV, **bórralos antes de capturar** si quieres un dataset solo con tus señas:
+
+```bash
+# Windows (PowerShell)
+Remove-Item landmarks_data.csv, landmarks_data_clean.csv
+# Linux / macOS
+rm landmarks_data.csv landmarks_data_clean.csv
+```
+
+Luego abre la captura:
+
+```bash
+python collect_data.py
+```
+
+Presiona la tecla de la letra que quieres grabar (A-Z), acomoda la mano y presiona `Espacio` para empezar. El script guarda muestras mientras tu mano esté visible y se pausa solo al llegar al límite por letra (500 por defecto, se cambia con `--samples`). `Espacio` también sirve para pausar, y `Esc` para salir. Puedes cerrar y volver a abrir el script: retoma donde quedaste.
+
+Algunos consejos para que el modelo salga más robusto:
+
+- Mueve un poco la mano mientras grabas (más cerca, más lejos, levemente girada), así el modelo aprende variaciones de la misma seña.
+- Graba en el lugar y con la luz donde lo vas a usar.
+- Si quieres que funcione en distintos lugares, graba cada letra en más de una sesión.
+
+### 2. Limpia y entrena
+
+```bash
+python clean_data.py   # descarta filas inválidas y genera landmarks_data_clean.csv
+python train.py        # entrena, muestra la precisión y guarda asl_model.pkl
+```
+
+Si solo quieres probar el proyecto sin grabar nada, puedes saltarte el paso 1 y entrenar con el dataset de ejemplo. Eso sí, va a funcionar mejor mientras más se parezcan tus manos y tu forma de hacer las señas a las mías.
+
+### 3. Ejecuta el reconocimiento
+
+```bash
+python main.py
+```
 
 ### Controles
 
@@ -78,19 +117,7 @@ El proyecto es un pipeline de cuatro scripts que se ejecutan en orden, más dos 
 4. **Clasificación.** El modelo entrega una probabilidad por letra; solo se acepta si supera el 70 %.
 5. **Estabilización.** Se vota entre las últimas 12 predicciones y la letra se escribe cuando se mantiene estable durante 6 frames.
 
-## Entrenar tu propio modelo
-
-Si quieres agregar tus propias muestras o empezar de cero:
-
-```bash
-python collect_data.py   # 1. graba las señas
-python clean_data.py     # 2. limpia el dataset
-python train.py          # 3. entrena y guarda el modelo
-```
-
-**Durante la captura**, presiona la tecla de la letra que quieres grabar (A-Z), acomoda la mano y presiona `Espacio` para empezar a grabar. El script guarda muestras mientras tu mano esté visible y se pausa solo al llegar al límite por letra (500 por defecto). `Espacio` también sirve para pausar, y `Esc` para salir. Si ya existe un CSV, las muestras nuevas se agregan al final sin borrar las anteriores.
-
-### Elegir el clasificador
+## Elegir el clasificador
 
 `train.py` permite elegir el modelo y el conjunto de features:
 
@@ -108,6 +135,8 @@ python train.py --model mlp --tune   # busca los mejores hiperparámetros (más 
 
 ## Resultados
 
+Estos números son con el dataset de ejemplo: lo grabé yo mismo con las 26 letras (A-Z) hechas con la mano derecha como poses estáticas, unas 10.800 muestras en total. Con tus propias muestras los resultados van a ser distintos; `train.py` te muestra la precisión de tu modelo cada vez que entrenas.
+
 Para medir la precisión de forma honesta, el set de prueba se separa por **bloques de video**, no por frames sueltos. Como los frames consecutivos son casi idénticos, separarlos al azar deja "copias" de los datos de prueba en el entrenamiento y la precisión sale inflada (entre 99,4 % y 99,9 % para cualquier modelo).
 
 Accuracy promedio con validación cruzada de 5 folds sobre bloques de video no vistos:
@@ -120,7 +149,7 @@ Accuracy promedio con validación cruzada de 5 folds sobre bloques de video no v
 | Red neuronal (MLP) | 97,8 % | 99,1 % |
 | **SVM** | 98,4 % | **99,3 %** |
 
-La combinación por defecto (SVM + distancias) comete unas **6 veces menos errores** que la versión original (Random Forest + coordenadas), y el modelo pesa 2 MB en vez de 44 MB.
+La combinación por defecto (SVM + distancias) comete unas **6 veces menos errores** que la versión original (Random Forest + coordenadas). Además, el modelo pesa 2 MB en vez de 44 MB.
 
 <p align="center">
   <img src="confusion_matrix.png" width="600" alt="Matriz de confusión del modelo SVM en el set de prueba" />
@@ -140,7 +169,7 @@ Los pocos errores que quedan se concentran en **M, N y T**: las tres son un puñ
 ## Limitaciones y próximos pasos
 
 - **Solo señas estáticas.** Las letras que llevan movimiento (como la J o la Z) se grabaron como una pose fija. Para cubrirlas habría que modelar secuencias de frames, por ejemplo con una LSTM o un Transformer sobre ventanas de landmarks.
-- **Un solo signante.** Todo el dataset es de una persona, así que puede costarle con manos de otras proporciones o estilos distintos. Sumar muestras de más gente es probablemente la mejora con más impacto.
+- **Modelo personal.** Cada modelo aprende las señas de quien lo entrenó, así que reconoce bien a esa persona pero puede costarle con otras. Para un modelo que sirva a cualquiera habría que juntar muestras de mucha gente distinta.
 - **Una mano a la vez.** La mano izquierda se reconoce reflejándola, pero no hay soporte para señas con dos manos.
 - **Sin corrección de texto.** El subtítulo se arma letra por letra; un corrector o modelo de lenguaje podría completar palabras y corregir errores.
 
