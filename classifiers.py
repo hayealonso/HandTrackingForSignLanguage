@@ -2,6 +2,7 @@
 #Para agregar uno nuevo basta con sumarlo a CLASSIFIERS (y opcionalmente a PARAM_GRIDS).
 #Todos deben implementar predict_proba, porque main.py usa la probabilidad como "confianza".
 
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.ensemble import ExtraTreesClassifier, RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
@@ -27,11 +28,15 @@ def _et():
 
 
 #SVM con kernel RBF: muy bueno con pocas muestras y features continuas. Necesita escalar los datos
-#probability=True es necesario para obtener predict_proba (hace el entrenamiento algo más lento)
+#La SVM no entrega probabilidades por sí sola: CalibratedClassifierCV las estima con validación
+#cruzada interna (reemplaza a SVC(probability=True), que scikit-learn marcó como obsoleto en la 1.9)
 def _svm():
     return make_pipeline(
         StandardScaler(),
-        SVC(C=10, gamma="scale", probability=True, class_weight="balanced", random_state=RANDOM_STATE),
+        CalibratedClassifierCV(
+            SVC(C=10, gamma="scale", class_weight="balanced", random_state=RANDOM_STATE),
+            ensemble=False,
+        ),
     )
 
 
@@ -64,11 +69,14 @@ CLASSIFIERS = {
 }
 
 #Grillas pequeñas de hiperparámetros para la búsqueda opcional (python train.py --tune)
-#Los nombres con "__" apuntan al paso correspondiente dentro del pipeline (p. ej. svc__C)
+#Los nombres con "__" apuntan al paso correspondiente dentro del pipeline (p. ej. calibratedclassifiercv__estimator__C)
 PARAM_GRIDS = {
     "rf": {"n_estimators": [200, 400], "max_depth": [None, 20, 30], "min_samples_leaf": [1, 2]},
     "et": {"n_estimators": [200, 400], "max_depth": [None, 20, 30], "min_samples_leaf": [1, 2]},
-    "svm": {"svc__C": [1, 10, 100], "svc__gamma": ["scale", 0.01, 0.001]},
+    "svm": {
+        "calibratedclassifiercv__estimator__C": [1, 10, 100],
+        "calibratedclassifiercv__estimator__gamma": ["scale", 0.01, 0.001],
+    },
     "knn": {"kneighborsclassifier__n_neighbors": [3, 5, 9, 15]},
     "mlp": {
         "mlpclassifier__hidden_layer_sizes": [(128,), (256, 128), (256, 128, 64)],
