@@ -1,5 +1,6 @@
 #Dependencias directas del proyecto (pip instala solas el resto, p. ej. jax o sounddevice vía mediapipe)
-#Versiones probadas con Python 3.12. mediapipe 0.10.14 no tiene builds para Python 3.13 o superior.
+#Requiere exactamente Python 3.12: numpy 2.5.1 exige 3.12 o superior y mediapipe 0.10.14 no tiene builds para 3.13
+#Funciona en Windows, Linux y macOS (en macOS, opencv-contrib-python 5.0 pide macOS 13 o superior)
 mediapipe==0.10.14
 opencv-contrib-python==5.0.0.93
 numpy==2.5.1

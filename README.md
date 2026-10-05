@@ -20,7 +20,9 @@ En vez de clasificar la imagen completa, el sistema usa [MediaPipe](https://ai.g
 
 ## Instalación
 
-Necesitas **Python 3.10, 3.11 o 3.12** (MediaPipe todavía no es compatible con 3.13) y una cámara web.
+Necesitas **Python 3.12** (ni anterior ni posterior: NumPy pide 3.12 o superior y MediaPipe todavía no es compatible con 3.13) y una cámara web. Funciona en Windows, Linux y macOS.
+
+> **En macOS:** se necesita macOS 13 Ventura o superior. Instala Python 3.12 desde [python.org](https://www.python.org/downloads/) o con `brew install python@3.12`, y crea el entorno con `python3.12 -m venv .venv` (en Mac el comando `python` suele no existir fuera de un entorno virtual). La primera vez que ejecutes un script, el sistema pedirá permiso de cámara para la Terminal (o para VS Code). Si lo rechazaste, actívalo en *Configuración del Sistema > Privacidad y seguridad > Cámara*. Si el script abre la cámara de tu iPhone (Continuity Camera) en vez de la del Mac, usa `--camera 1`.
 
 ```bash
 git clone https://github.com/hayealonso/HandTrackingForSignLanguage.git

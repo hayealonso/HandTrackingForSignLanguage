@@ -229,7 +229,7 @@ def main():
             elif key == 32:  #espacio: separa palabras y permite repetir la última letra
                 caption += " "
                 last_confirmed_letter = None
-            elif key == 8:  #backspace: borra el último carácter
+            elif key in (8, 127):  #backspace: borra el último carácter (en macOS la tecla envía 127)
                 caption = caption[:-1]
             elif key == ord("c"):  #c: limpia todo el subtítulo
                 caption = ""
